@@ -1,0 +1,36 @@
+*{
+  padding: 5px;
+  margin: 5px;
+  background-color: #FFF5E4;
+}
+
+
+.info {
+  border : 5px solid;
+  border-radius: 10px;
+  border-color: #850000;
+  margin-bottom: 10px;
+}
+
+.help{
+  border-radius: 10px;
+  border:5px solid;
+  border-color: #850000;
+  margin-bottom: 10px;
+}
+
+.title{
+  text-align: center;
+  color: black;
+}
+
+.textbox{
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow:1px 2px black;
+}
+
+.btn{
+  box-shadow:1px 2px black;
+  padding:10px;
+}
