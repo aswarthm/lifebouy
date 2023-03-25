@@ -5,14 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
-  <link rel="stylesheet" href="./styles.css">
   <title>LIFEBOUY</title>
 </head>
 
 <body>
 
 <div class="title">
-  <h1>LIFEBOUY</h1>
+  <h1>LIFEBUOY</h1>
 </div>
 <form action="">
   <div>
@@ -51,7 +50,6 @@
       <div>
         <label for="chall">Any other challenges</label>
         <br>
-        <input class="textbox" type="text" id="chall" name="chall">
         <br>
       </div>
     </div>
@@ -59,12 +57,64 @@
     <input class="btn" type="submit" value="Submit">
     
     <div class="SOS">
-      <h4> Stay Calm!! If any undesirable challenges, press the SOS button</h4>
+      <p> Use the SOS button only if you need<b>Immediate Evacuation</b></p>
       <a href="">
-        <button class="btn">SOS</button>
+        <button class="btnsos">SOS</button>
       </a>
     </div>
 </form>
 </body>
+
+<style>
+  * {
+    padding: 5px;
+    margin: 5px;
+  }
+
+  body {
+    background-color: #FFF5E4;
+    font-family: 'Roboto', sans-serif;
+  }
+
+
+  .info {
+    border: 5px solid;
+    border-radius: 10px;
+    border-color: #850000;
+    margin-bottom: 10px;
+  }
+
+  .help {
+    border-radius: 10px;
+    border: 5px solid;
+    border-color: #850000;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    text-align: center;
+    color: whitesmoke;
+    background-color: #850000;
+    border-bottom: solid 4px rgb(48, 48, 48);
+    font-size: xx-large;
+  }
+
+  .textbox {
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 1px 2px black;
+  }
+
+  .btn {
+    box-shadow: 1px 2px black;
+    padding: 20px 10px;
+    border-radius: 12px;
+    width: 100%;
+    font-size: xx-large;
+  }
+</style>
 
 </html>
