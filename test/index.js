@@ -17,30 +17,39 @@ const db = getDatabase(app)
 const dbRef = ref(db)
 
 let map;
+let infoWindows = []
 const ny = { lat: 40.76010, lng: -73.983002 };
 const blr = {lat: 12.9716, lng: 77.5946}
 const location = ny
 
 
 function initMap() {
-      map = new google.maps.Map(document.getElementById("map"), {
-      mapTypeId: "roadmap",
-      zoom: 15,
-      center: location,
-      mapId: "6d77c92efad4c954"
-    });
-    map.setTilt(45); 
-  }
-  
-  window.initMap = initMap;
-
-  document.getElementById("guigui").addEventListener("click", ()=>{
-    addBuoy({ lat: 40.76020, lng: -73.985002 })
-    addPhone(ny)
-    
+  map = new google.maps.Map(document.getElementById("map"), {
+    mapTypeId: "roadmap",
+    zoom: 10,
+    center: location,
+    mapId: "6d77c92efad4c954"
+  });
+  map.setTilt(45); 
+  addMarkers()
+  map.addListener("click", ()=>{
+    for (let infowindow of infoWindows)
+    infowindow.close()
   })
+}
+  
+window.initMap = initMap;
 
-function addBuoy(location){
+document.getElementById("guigui").addEventListener("click", ()=>{
+  addBuoy({ lat: 40.76020, lng: -73.985002 })
+  addPhone(ny)
+
+})
+
+function addBuoy(buoyData, buoyId){
+  let location = buoyData["location"]
+  console.log(infoWindows)
+
   const svgMarker = {
     path: `M256,0C114.844,0,0,114.844,0,256s114.844,256,256,256s256-114.844,256-256S397.156,0,256,0z M448,256
     c0,32.625-8.23,63.344-22.645,90.281l-67.123-44.75C364.461,287.602,368,272.219,368,256c0-16.211-3.539-31.594-9.768-45.523
@@ -63,11 +72,21 @@ const marker = new google.maps.Marker({
   icon: svgMarker,
   position: location,
   map: map,
+  animation: google.maps.Animation.DROP
 });
+let htmlString = `<div>
+<h3>Bouy Id: ${buoyId}</h3>
+<p>Number of devices: ${buoyData["numDevices"]}</p>
+<p>Battery: ${buoyData["battery"]}</p>
+</div>`
+makeInfoWindow(marker, htmlString)
 
 }
 
-function addPhone(location){
+
+function addPhone(phoneData, phoneId){
+  let location = phoneData["location"]
+
   let svg = '<svg width="30px" height="30px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M729.6 870.4c0 28.16-23.04 51.2-51.2 51.2H345.6c-28.16 0-51.2-23.04-51.2-51.2V179.2c0-28.16 23.04-51.2 51.2-51.2h332.8c28.16 0 51.2 23.04 51.2 51.2v691.2z" fill="#E1E0A6" /><path d="M678.4 934.4H345.6c-35.84 0-64-28.16-64-64V179.2c0-35.84 28.16-64 64-64h332.8c35.84 0 64 28.16 64 64v691.2c0 35.84-28.16 64-64 64zM345.6 140.8c-21.76 0-38.4 16.64-38.4 38.4v691.2c0 21.76 16.64 38.4 38.4 38.4h332.8c21.76 0 38.4-16.64 38.4-38.4V179.2c0-21.76-16.64-38.4-38.4-38.4H345.6z" fill="#231C1C" /><path d="M691.2 744.96c0 12.8-11.52 23.04-25.6 23.04H358.4c-14.08 0-25.6-10.24-25.6-23.04V253.44c0-12.8 11.52-23.04 25.6-23.04h307.2c14.08 0 25.6 10.24 25.6 23.04v491.52z" fill="#F2E5CA" /><path d="M665.6 780.8H358.4c-21.76 0-38.4-16.64-38.4-35.84V253.44c0-20.48 16.64-35.84 38.4-35.84h307.2c21.76 0 38.4 16.64 38.4 35.84v491.52c0 19.2-16.64 35.84-38.4 35.84zM358.4 243.2c-7.68 0-12.8 5.12-12.8 10.24v491.52c0 5.12 5.12 10.24 12.8 10.24h307.2c7.68 0 12.8-5.12 12.8-10.24V253.44c0-5.12-5.12-10.24-12.8-10.24H358.4z" fill="#231C1C" /><path d="M512 844.8m-38.4 0a38.4 38.4 0 1 0 76.8 0 38.4 38.4 0 1 0-76.8 0Z" fill="#D4594C" /><path d="M512 896c-28.16 0-51.2-23.04-51.2-51.2s23.04-51.2 51.2-51.2 51.2 23.04 51.2 51.2-23.04 51.2-51.2 51.2z m0-76.8c-14.08 0-25.6 11.52-25.6 25.6s11.52 25.6 25.6 25.6 25.6-11.52 25.6-25.6-11.52-25.6-25.6-25.6z" fill="#231C1C" /><path d="M460.8 166.4h102.4v25.6h-102.4z" fill="#231C1C" /></svg>'
   const svgMarker = {
     url: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
@@ -83,5 +102,66 @@ const marker = new google.maps.Marker({
   position: location,
   map: map,
 });
+console.log("data",phoneData, phoneId)
+let htmlString = `<div>
+<h3>Phone id: ${phoneId}</h3>
+<p>Number of People: ${phoneData["numPeople"]}</p>
+<div class="requirements">
+  ${phoneData["flags"]["food"]?"<p>Food</p>":""}
+  ${phoneData["flags"]["medical"]?"<p>Medical Emergency</p>":""}
+</div>
+<div class="people">
+  ${phoneData["flags"]["injured"]?"<p>Medical Attention</p>":""}
+  ${phoneData["flags"]["women"]?"<p>Women</p>":""}
+  ${phoneData["flags"]["children"]?"<p>Children</p>":""}
+  ${phoneData["flags"]["disabledPeople"]?"<p>Disabled People</p>":""}
+
+
+</div>
+</div>`
+makeInfoWindow(marker, htmlString)
 
 }
+
+function makeInfoWindow(marker, htmlString){
+  const infowindow = new google.maps.InfoWindow({
+    content: htmlString, //U CAN PUT HTML HERE
+    map:map,
+    width: 500,
+
+  });
+  infoWindows.push(infowindow)
+  
+  marker.addListener("click", ()=>{
+    infowindow.open({
+      anchor: marker,
+    });
+  })
+}
+
+
+function addMarkers(){
+  get(child(dbRef, "/")).then((snapshot) => {
+    console.log(snapshot.val())
+    let data = snapshot.val()
+    for (let buoyId in  data["buoys"]){
+      let buoyData = data["buoys"][buoyId]
+      addBuoy(buoyData, buoyId)
+    }
+    for (let phoneId in  data["phones"]){
+      let phoneData = data["phones"][phoneId]
+      addPhone(phoneData, phoneId)
+    }
+  })
+}
+
+/*
+get location from db and make markers DONE
+info window DONE
+stuff in infowindow
+location search 
+bounce bounce
+legend
+*/
+
+//strcmp("on", food_1)?0:1
