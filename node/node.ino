@@ -3,25 +3,11 @@
 #include <ESP8266WebServer.h>
 #include <DNSServer.h>
 #include <ESP8266mDNS.h>
+#include "page.h"
 
 #ifndef SSID
 #define SSID "open"
 #endif
-
-
-
-const char MAIN_page[] PROGMEM = R"=====(
-<HTML>
-	<HEAD>
-			<TITLE>My first web page</TITLE>
-	</HEAD>
-<BODY>
-	<CENTER>
-			<B>Hello World.... </B>
-	</CENTER>	
-</BODY>
-</HTML>
-)=====";
 
 const char *softAP_ssid = SSID;
 
