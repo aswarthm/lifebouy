@@ -95,7 +95,7 @@ void handleGet() {
   Serial.println(server.args());
   for (int i = 0; i < server.args(); i++) {
     Serial.print(server.argName(i));
-    Serial.println("\n" + String(server.arg(i)));
+    Serial.println(": " + String(server.arg(i)));
   }
 
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -107,14 +107,12 @@ void handleGet() {
 }
 
 void setup() {
-  delay(1000);
   Serial.begin(9600);
   Serial.println();
   Serial.println("Configuring access point...");
   WiFi.softAPConfig(apIP, apIP, netMsk);
   // its an open WLAN access point without a password parameter
   WiFi.softAP(softAP_ssid);
-  delay(1000);
   Serial.print("AP IP address: ");
   Serial.println(WiFi.softAPIP());
 
