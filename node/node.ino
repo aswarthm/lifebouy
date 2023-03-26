@@ -111,15 +111,29 @@ void handleGet() {
   server.send(200, "text/html", "ok");
 }
 void handleBeep(){
-  
   digitalWrite(buzz, HIGH);
-  delay(200);
+  delay(100);
   digitalWrite(buzz, LOW);
-  delay(200);
+  delay(100);
   digitalWrite(buzz, HIGH);
-  delay(200);
+  delay(100);
   digitalWrite(buzz, LOW);
-  delay(200);
+  delay(100);
+  digitalWrite(buzz, HIGH);
+  delay(100);
+  digitalWrite(buzz, LOW);
+  delay(100);
+  digitalWrite(buzz, HIGH);
+  delay(100);
+  digitalWrite(buzz, LOW);
+  delay(100);
+  digitalWrite(buzz, HIGH);
+  delay(100);
+  digitalWrite(buzz, LOW);
+  delay(100);
+
+  handleRoot();
+  return;
   
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
