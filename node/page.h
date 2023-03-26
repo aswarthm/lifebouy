@@ -61,11 +61,11 @@ const char MAIN_page[] = R"=====(
       <input type="hidden" id="lon" name="lon" value="77.53507211285884">
       <input class="btn" type="submit" value="Submit">
 
+  </form>
+  <form action="/beep">  
       <div class="SOS">
         <h4> Stay Calm!! If any undesirable challenges, press the SOS button</h4>
-        <a href="">
-          <button class="btn">SOS</button>
-        </a>
+          <input class="btn" type="submit" value="SOS">
       </div>
   </form>
 </body>
