@@ -9,6 +9,8 @@
 #define SSID "open"
 #endif
 
+int buzz = D1;
+
 const char *softAP_ssid = SSID;
 
 // The access points IP address and net mask
@@ -48,7 +50,7 @@ String toStringIp(IPAddress ip) {
 // captive portal
 boolean captivePortal() {
   if (!isIp(server.hostHeader())) {
-    Serial.println("Request redirected to captive portal");
+    //Serial.println("Request redirected to captive portal");
     server.sendHeader("Location", String("http://") + toStringIp(server.client().localIP()), true);
     server.send(302, "text/plain", "");
     server.client().stop();
@@ -92,11 +94,14 @@ void handleNotFound() {
 }
 
 void handleGet() {
-  Serial.println(server.args());
+  String msg = "";
+  //Serial.println(server.args());
   for (int i = 0; i < server.args(); i++) {
-    Serial.print(server.argName(i));
-    Serial.println(": " + String(server.arg(i)));
+    //Serial.print(server.argName(i));
+    //Serial.println(": " + String(server.arg(i)));
+    msg += server.argName(i) + ":" + String(server.arg(i)) + ",";
   }
+  Serial.println(msg);
 
   server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server.sendHeader("Pragma", "no-cache");
@@ -104,6 +109,25 @@ void handleGet() {
 
 
   server.send(200, "text/html", "ok");
+}
+void handleBeep(){
+  
+  digitalWrite(buzz, HIGH);
+  delay(200);
+  digitalWrite(buzz, LOW);
+  delay(200);
+  digitalWrite(buzz, HIGH);
+  delay(200);
+  digitalWrite(buzz, LOW);
+  delay(200);
+  
+  server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  server.sendHeader("Pragma", "no-cache");
+  server.sendHeader("Expires", "-1");
+
+
+  server.send(200, "text/html", "ok");
+    
 }
 
 void setup() {
@@ -122,11 +146,14 @@ void setup() {
 
   /* Setup the web server */
   server.on("/", handleRoot);
-  server.on("/get", handleGet);
   server.on("/generate_204", handleRoot);
+  server.on("/get", handleGet);
+  server.on("/beep", handleBeep);
   server.onNotFound(handleNotFound);
   server.begin();  // Web server start
   Serial.println("HTTP server started");
+
+  pinMode(buzz, OUTPUT);
 }
 
 void loop() {
